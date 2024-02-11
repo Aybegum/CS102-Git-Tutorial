@@ -6,15 +6,33 @@ public class Cipher
     // original string and replace it with the cipher alphabet letter at the same position
     public static final String ORIGINAL_ALPHABET = "abcdefghijklmnopqrstuvwxyz";
     public static final String CIPHER_ALPHABET = "dfxyhrklvwuasgimnojpqetbcz";
-
+    public static final char[] punctuationMarks = {',', '.', '!', '?'};
+    
     public String encrypt(String inputString) {
-        
         // output string will be collected in this variable, one char at a time
         String outputString = "";
         
         // for all chars in the input string
         for (int i = 0; i < inputString.length(); i++)   
-        {
+        { 
+            char charToWork = inputString.charAt(i);
+            if( charToWork == ' ' || isPresent(punctuationMarks, charToWork) )
+            {
+                outputString += charToWork;
+            }
+            else
+            {
+                int indexFromTheOriginalAlphabet = ORIGINAL_ALPHABET.indexOf(charToWork);
+                if(indexFromTheOriginalAlphabet == -1)
+                {
+                    System.out.println(" The letter couldn't be found in the alphabet!!");
+                }
+                else
+                {
+                    char charFromTheCipher = CIPHER_ALPHABET.charAt(indexFromTheOriginalAlphabet);
+                    outputString += charFromTheCipher;
+                }
+            }
 
         }
 
@@ -25,9 +43,14 @@ public class Cipher
         
         // output string will be collected in this variable, one char at a time
         String outputString = "";
-        
-        replaceChar('a',true);
-        
+        for (int i = 0 ; i < inputString.length(); i++)
+        {
+            char charToDecrypt = inputString.charAt(i);
+            char charDecrypted =  replaceChar(charToDecrypt, false);
+            outputString += charDecrypted;
+
+        }
+
         return outputString;
     }
 
@@ -42,7 +65,7 @@ public class Cipher
             for (int i = 0; i < ORIGINAL_ALPHABET.length(); i++)   
             {
                 if(ORIGINAL_ALPHABET.charAt(i) == inputChar) {
-
+                    return CIPHER_ALPHABET.charAt(i);
                 }
             }
         }
@@ -58,4 +81,20 @@ public class Cipher
         // if we did not find it in the alphabet, then return the original char
         return inputChar;
     }
-}   
+    /**
+     * 
+     * @param punctuationMarks the list of the punction marks 
+     * @param a is the char to search for if it is preented in the list
+     * @return returns boolean value 
+     */
+    public boolean isPresent(char[] punctuationMarks, char a)
+    {
+        for (char m : punctuationMarks) {
+            if ( m == a)
+            { 
+                return true;
+            }
+        }
+        return false;
+    }   
+}  
